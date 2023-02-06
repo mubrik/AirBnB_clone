@@ -41,5 +41,5 @@ class BaseModel:
         attrs = self.__dict__.copy()
         attrs['__class__'] = self.__class__.__name__
         attrs['created_at'] = self.created_at.isoformat()
-        attrs['updated_at'] =  self.updated_at.isoformat()
+        attrs['updated_at'] = self.updated_at.isoformat()
         return attrs
