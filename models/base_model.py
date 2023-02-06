@@ -21,8 +21,12 @@ class BaseModel:
 
         # Create attributes from kwargs
         ignore = ('__class__', 'created_at', 'updated_at')
-        self.created_at = datetime.fromisoformat(kwargs['created_at'])
-        self.updated_at = datetime.fromisoformat(kwargs['updated_at'])
+        self.created_at = datetime.fromisoformat(
+            self.val_str_or_raise('created_at', kwargs['created_at'])
+        )
+        self.updated_at = datetime.fromisoformat(
+            self.val_str_or_raise('updated_at', kwargs['updated_at'])
+        )
 
         for attr, value in kwargs.items():
             if attr not in ignore:
@@ -31,6 +35,14 @@ class BaseModel:
     def __str__(self):
         """Returns a string representation of the object"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
+
+    def val_str_or_raise(self, name, string):
+        """ validate string or raise """
+        if not isinstance(string, str):
+            raise TypeError(f"{name} must be a string")
+        if not string:
+            raise ValueError(f"{name} can't be empty")
+        return string
 
     def save(self):
         """Update the updated_at attribute"""
