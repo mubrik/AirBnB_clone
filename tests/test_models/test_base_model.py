@@ -26,18 +26,18 @@ class TestBaseModelAttributes(unittest.TestCase):
         self.assertEqual(type(b_obj1.id), str)
         self.assertNotEqual(b_obj1.id, b_obj2.id)
 
-        def test_created_at(self):
-            """Tests the created_at attribute"""
-            self.assertTrue(hasattr(b_obj1, 'created_at'))
-            self.assertEqual(type(b_obj1.created_at), datetime)
-            self.assertNotEqual(b_obj1.created_at, b_obj2.created_at)
-            self.assertNotEqual(b_obj.created_at, b_obj.updated_at)
+    def test_created_at(self):
+        """Tests the created_at attribute"""
+        self.assertTrue(hasattr(b_obj1, 'created_at'))
+        self.assertEqual(type(b_obj1.created_at), datetime)
+        self.assertNotEqual(b_obj1.created_at, b_obj2.created_at)
+        self.assertNotEqual(b_obj1.created_at, b_obj1.updated_at)
 
-        def test_updated_at(self):
-            """Tests the updated_at attribute"""
-            self.assertTrue(hasattr(b_obj1, 'updated_at'))
-            self.assertEqual(type(b_obj1.updated_at), datetime)
-            self.assertNotEqual(b_obj1.updated_at, b_obj2.updated_at)
+    def test_updated_at(self):
+        """Tests the updated_at attribute"""
+        self.assertTrue(hasattr(b_obj1, 'updated_at'))
+        self.assertEqual(type(b_obj1.updated_at), datetime)
+        self.assertNotEqual(b_obj1.updated_at, b_obj2.updated_at)
 
 
 class TestBaseModelMethods(unittest.TestCase):
@@ -69,3 +69,18 @@ class TestBaseModelMethods(unittest.TestCase):
         obj = BaseModel(**obj_dict)
         self.assertEqual(obj.to_dict(), b_obj1.to_dict())
         self.assertEqual(obj.to_dict(), obj_dict)
+        obj_dict['name'] = 'My first base class'
+        obj.name = 'My first base class'
+        obj_dict['num'] = 1024
+        obj.num = 1024
+        self.assertEqual(obj.to_dict(), obj_dict)
+        obj = BaseModel(**b_obj1.to_dict())
+        self.assertEqual(obj.to_dict(), b_obj1.to_dict())
+
+    def test_save(self):
+        """Tests the save method"""
+        temp = b_obj1.updated_at
+        b_obj1.save()
+        self.assertNotEqual(temp, b_obj1.updated_at)
+        self.assertLess(temp, b_obj1.updated_at)
+        self.assertNotEqual(b_obj1.updated_at, b_obj1.created_at)
