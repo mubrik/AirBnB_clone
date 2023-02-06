@@ -10,6 +10,34 @@ from uuid import uuid4
 import unittest
 
 
+class TestBaseModelAttributes(unittest.TestCase):
+    """Test case for BaseModel attributes"""
+
+    @classmethod
+    def setUpClass(self):
+        """Create object to use as test objects"""
+        global b_obj1, b_obj2
+        b_obj1 = BaseModel()
+        b_obj2 = BaseModel()
+
+    def test_id(self):
+        """Tests the id attribute"""
+        self.assertTrue(hasattr(b_obj1, 'id'))
+        self.assertEqual(type(b_obj1.id), str)
+        self.assertNotEqual(b_obj1.id, b_obj2.id)
+
+        def test_created_at(self):
+            """Tests the created_at attribute"""
+            self.assertTrue(hasattr(b_obj1, 'created_at'))
+            self.assertEqual(type(b_obj1.created_at), datetime)
+            self.assertNotEqual(b_obj1.created_at, b_obj2.created_at)
+            self.assertNotEqual(b_obj.created_at, b_obj.updated_at)
+
+        def test_updated_at(self):
+            """Tests the updated_at attribute"""
+            self.assertTrue(hasattr(b_obj1, 'updated_at'))
+            self.assertEqual(type(b_obj1.updated_at), datetime)
+            self.assertNotEqual(b_obj1.updated_at, b_obj2.updated_at)
 
 
 class TestBaseModelMethods(unittest.TestCase):
@@ -36,8 +64,6 @@ class TestBaseModelMethods(unittest.TestCase):
         """Test the to_dict method"""
         obj_dict = b_obj1.to_dict()
         self.assertEqual(obj_dict['id'], b_obj1.id)
-        print(f"obj_dict['created_at'] = {obj_dict['created_at']}")
-        print(f"b_obj1.created_at = {b_obj1.created_at}")
         self.assertEqual(obj_dict['created_at'], b_obj1.created_at.isoformat())
         self.assertEqual(obj_dict['updated_at'], b_obj1.updated_at.isoformat())
         obj = BaseModel(**obj_dict)
