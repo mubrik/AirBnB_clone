@@ -6,6 +6,7 @@ Includes the class BaseModel which is the base of each class.
 
 from uuid import uuid4
 from datetime import datetime
+from . import storage
 
 
 class BaseModel:
@@ -17,6 +18,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            storage.new(self.to_dict())
             return
 
         # Create attributes from kwargs
@@ -47,6 +49,7 @@ class BaseModel:
     def save(self):
         """Update the updated_at attribute"""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Returns a dictionary containing all the attributes of the object"""
