@@ -14,13 +14,33 @@ class FileStorage:
     __file_path = "db.json"
     __objects = {}
 
+    def __del__(self):
+        """delete helper, useful for testing"""
+        self.__objects = {}
+
+    @property
+    def fpa(self):
+        """for convenience and testing"""
+        return self.__file_path
+
+    @fpa.setter
+    def fpa(self, value):
+        """for convenience and testing"""
+        if not value or not isinstance(value, str):
+            return
+        self.__file_path = value
+
     def all(self):
         """returns the cls.__objects"""
         return self.__objects
 
     def new(self, obj):
         """sets the obj in cls.__objects"""
-        # add validation later
+        if not obj:
+            raise ValueError("Bad instance argument")
+        if not self.validate_instance(obj):
+            raise TypeError("Argument isnt a subclass of BaseModel")
+        # safe instance
         obj_data = obj.to_dict()
         attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
         self.__objects[attr_name] = obj
@@ -32,7 +52,7 @@ class FileStorage:
             return
         # validate all instances?
         new_objects = {
-            key: val.to_dict() for (key, val) in self.__objects.items()}
+            k: v.to_dict() for (k, v) in self.__objects.items()}
         # open file, truncate if exist
         with open(self.__file_path, mode="w") as f:
             f.write(self.to_json_string(new_objects))
@@ -50,10 +70,15 @@ class FileStorage:
                 obj = self.from_json_string(json_str)
                 if not isinstance(obj, object):
                     raise TypeError("File JSON must be an object")
+                # create a wrapper function to handle multiple class later
                 self.__objects = {k: BaseModel(**v) for (k, v) in obj.items()}
         except FileNotFoundError as e:
             # raise or return hmm?
             pass
+
+    def validate_instance(self, ins):
+        from models.base_model import BaseModel
+        return issubclass(type(ins), BaseModel)
 
     @staticmethod
     def to_json_string(dict_obj):
