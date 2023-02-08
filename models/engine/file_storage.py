@@ -6,6 +6,10 @@ serializes instances to a JSON file and deserializes JSON file to instances.
 """
 
 import json
+from typing import Dict
+
+# types
+Type_ObjDict = Dict[str, Dict[str, str]]
 
 
 class FileStorage:
@@ -48,8 +52,6 @@ class FileStorage:
     def save(self):
         """serializes __objects to the JSON file"""
         # checks
-        if not self.__objects:
-            return
         # validate all instances?
         new_objects = {
             k: v.to_dict() for (k, v) in self.__objects.items()}
@@ -62,19 +64,27 @@ class FileStorage:
         # checks
         if not self.__file_path:
             return
-        from models.base_model import BaseModel
         # read file
         try:
             with open(self.__file_path, mode="r") as f:
                 json_str = f.read()
-                obj = self.from_json_string(json_str)
+                obj: Type_ObjDict = self.from_json_string(json_str)
                 if not isinstance(obj, object):
                     raise TypeError("File JSON must be an object")
-                # create a wrapper function to handle multiple class later
-                self.__objects = {k: BaseModel(**v) for (k, v) in obj.items()}
+                self.__objects = {
+                    k: self.make_inst(v) for (k, v) in obj.items()}
         except FileNotFoundError as e:
             # raise or return hmm?
             pass
+
+    def make_inst(self, obj: Dict[str, str]):
+        from exports import valid_classes
+        # verify
+        cls = valid_classes.get(obj["__class__"], None)
+        if not cls:
+            # raise or return?
+            return
+        return cls(**obj)
 
     def validate_instance(self, ins):
         from models.base_model import BaseModel
