@@ -8,7 +8,7 @@ Type help to get all commands
 
 import cmd
 from models import storage
-from models.base_model import BaseModel
+from exports import valid_classes, BaseModel
 
 
 class HBNBCommand(cmd.Cmd):
@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
         """Does clean up tasks an exits the interpreter"""
         return True
 
-    def do_create(self, class_name):
+    def do_create(self, class_name: str):
         """create <class_name>:
         Create and saves a new instance of <class_name>"""
         # Verify class name
@@ -47,15 +47,15 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        if class_name not in self.available:
+        if class_name not in valid_classes:
             print("** class doesn't exist **")
             return
-
-        obj = self.available[class_name]()  # This looks ridiculous
+        # This looks ridiculous, mb: looks fine lol
+        obj = valid_classes[class_name]()
         storage.save()
         print(obj.id)
 
-    def do_show(self, line):
+    def do_show(self, line: str):
         """show class_name object_id: prints the string representation of
         object with id object_id"""
         # Verify argument
@@ -63,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = line.split()
-        if args[0] not in self.available:
+        if args[0] not in valid_classes:
             print("** class doesn't exist **")
             return
         if len(args) == 1:
@@ -78,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
         # instance exist, print it!
         print(all_objs[obj_name])
 
-    def do_destroy(self, line):
+    def do_destroy(self, line: str):
         """destroy class_name object_id: destroy the object with the id
         object_id"""
         # Verify argument
@@ -86,7 +86,11 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = line.split()
+<<<<<<< HEAD
         if args[0] not in self.available:
+=======
+        if args[0] not in valid_classes:
+>>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
             print("** class doesn't exist **")
             return
         if len(args) == 1:
@@ -102,6 +106,7 @@ class HBNBCommand(cmd.Cmd):
         del all_objs[obj_name]
         storage.save()
 
+<<<<<<< HEAD
     def do_all(self, line):
         """all [class_name]: Prints all the current saved objects."""
         all_objs = storage.all()
@@ -123,6 +128,23 @@ class HBNBCommand(cmd.Cmd):
         print(list_objs)
 
     def do_update(self, line):
+=======
+    def do_all(self, line: str):
+        """all [class_name]: Prints all the current saved objects."""
+        all_objs = storage.all()
+        if line and line not in valid_classes:
+            print("** class doesn't exist **")
+            return
+        filter = True if line and line in valid_classes else False
+        list_objs = []
+        if filter:
+            list_objs = [str(v) for k, v in all_objs.items() if line in k]
+        else:
+            list_objs = [str(v) for _, v in all_objs.items()]
+        print(list_objs)
+
+    def do_update(self, line: str):
+>>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
         """update class_name object_id attribute value: Updates the object with
         the id object_id by assigning the attribute <attribute> to <value>"""
         if not line:
@@ -130,7 +152,11 @@ class HBNBCommand(cmd.Cmd):
             return
         args = line.split()
         arg_l = len(args)
+<<<<<<< HEAD
         if args[0] not in self.available:
+=======
+        if args[0] not in valid_classes:
+>>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
             print("** class doesn't exist")
             return
         if arg_l == 1:
@@ -147,6 +173,7 @@ class HBNBCommand(cmd.Cmd):
         if arg_l == 3:
             print("** value missing **")
             return
+<<<<<<< HEAD
         print(args)
         # Figure out what the value is. Possible values are in integers,
         # float and strings.
@@ -158,6 +185,10 @@ class HBNBCommand(cmd.Cmd):
                 pass  # Not a float
         elif val.isdigit():  # it is an int
             value = int(val) """
+=======
+        # mubrik: handle string in string?
+        key, val = args[2], args[3]
+>>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
         value = None
         try:
             if "." in key:  # float
@@ -167,12 +198,9 @@ class HBNBCommand(cmd.Cmd):
         except ValueError as e:
             # value error means conversion failed, so str, can pass
             value = str(val)
-        # Have no access to the object here. mubrik: we do now
         instance = all_objs[obj_name]
-        instance[key] = value
+        setattr(instance, key, value)
         instance.save()
-        # obj = self.available[args[0]](**obj_dict)
-        # Overwrite the previous entry
 
 
 if __name__ == "__main__":
