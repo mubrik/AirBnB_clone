@@ -78,6 +78,7 @@ class FileStorage:
             pass
 
     def make_inst(self, obj: Dict[str, str]):
+        """makes instance of a specific class"""
         from exports import valid_classes
         # verify
         cls = valid_classes.get(obj["__class__"], None)
