@@ -2,4 +2,5 @@ temp
 temp*
 __pycache__
 .vscode
-*.pycdb.json
+*.pyc
+db.json
