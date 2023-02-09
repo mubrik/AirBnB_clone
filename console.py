@@ -86,11 +86,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
         args = line.split()
-<<<<<<< HEAD
-        if args[0] not in self.available:
-=======
         if args[0] not in valid_classes:
->>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
             print("** class doesn't exist **")
             return
         if len(args) == 1:
@@ -106,29 +102,6 @@ class HBNBCommand(cmd.Cmd):
         del all_objs[obj_name]
         storage.save()
 
-<<<<<<< HEAD
-    def do_all(self, line):
-        """all [class_name]: Prints all the current saved objects."""
-        all_objs = storage.all()
-        if line and line not in self.available:
-            print("** class doesn't exist **")
-            return
-        filter = True if line and line in self.available else False
-        list_objs = []
-        if filter:
-            list_objs = [v for k, v in all_objs.items() if line in k]
-        else:
-            list_objs = [v for _, v in all_objs.items()]
-        # for obj_name, obj in all_objs.items():
-        #     if not line:
-        #         list_objs.append(str(obj))
-        #     else:
-        #         list_objs.append(str(obj))
-
-        print(list_objs)
-
-    def do_update(self, line):
-=======
     def do_all(self, line: str):
         """all [class_name]: Prints all the current saved objects."""
         all_objs = storage.all()
@@ -144,7 +117,6 @@ class HBNBCommand(cmd.Cmd):
         print(list_objs)
 
     def do_update(self, line: str):
->>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
         """update class_name object_id attribute value: Updates the object with
         the id object_id by assigning the attribute <attribute> to <value>"""
         if not line:
@@ -152,11 +124,7 @@ class HBNBCommand(cmd.Cmd):
             return
         args = line.split()
         arg_l = len(args)
-<<<<<<< HEAD
-        if args[0] not in self.available:
-=======
         if args[0] not in valid_classes:
->>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
             print("** class doesn't exist")
             return
         if arg_l == 1:
@@ -173,34 +141,37 @@ class HBNBCommand(cmd.Cmd):
         if arg_l == 3:
             print("** value missing **")
             return
-<<<<<<< HEAD
-        print(args)
-        # Figure out what the value is. Possible values are in integers,
-        # float and strings.
-        key, val = args[2], args[3]
-        """ if val.count(".") == 1:  # possible float
-            try:
-                value = float(val)
-            except ValueError:
-                pass  # Not a float
-        elif val.isdigit():  # it is an int
-            value = int(val) """
-=======
         # mubrik: handle string in string?
         key, val = args[2], args[3]
->>>>>>> 5e0f03df184beb16733d2c39a7ce633103042057
         value = None
         try:
-            if "." in key:  # float
+            # if "." in key:  # float
+            if "." in val:  # arfs6: check value not key
                 value = float(val)
             else:
                 value = int(val)
         except ValueError as e:
             # value error means conversion failed, so str, can pass
-            value = str(val)
+            value = self.get_update_str(line)
         instance = all_objs[obj_name]
         setattr(instance, key, value)
         instance.save()
+
+    def get_update_str(self, line):
+        """Return the right string to use as value for the update command"""
+        # strip the first 3 arguments
+        for i in range(3):
+            idx = line.index(' ')
+            line = line[idx + 1:]
+
+        if line[0] != '"':
+            # return the first argument
+            return line.split()[0]
+
+        # find the other quote
+        line = line[1:]
+        idx = line.index('"')
+        return line[:idx]
 
 
 if __name__ == "__main__":
