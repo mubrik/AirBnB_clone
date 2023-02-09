@@ -114,12 +114,6 @@ class HBNBCommand(cmd.Cmd):
             list_objs = [str(v) for k, v in all_objs.items() if line in k]
         else:
             list_objs = [str(v) for _, v in all_objs.items()]
-        # for obj_name, obj in all_objs.items():
-        #     if not line:
-        #         list_objs.append(str(obj))
-        #     else:
-        #         list_objs.append(str(obj))
-
         print(list_objs)
 
     def do_update(self, line: str):
@@ -148,16 +142,7 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return
         # mubrik: handle string in string?
-        # Figure out what the value is. Possible values are in integers,
-        # float and strings.
         key, val = args[2], args[3]
-        """ if val.count(".") == 1:  # possible float
-            try:
-                value = float(val)
-            except ValueError:
-                pass  # Not a float
-        elif val.isdigit():  # it is an int
-            value = int(val) """
         value = None
         try:
             if "." in key:  # float
