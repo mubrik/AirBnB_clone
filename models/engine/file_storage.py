@@ -15,7 +15,7 @@ Type_ObjDict = Dict[str, Dict[str, str]]
 class FileStorage:
     """Defines common attributes for serialization and deserialization"""
 
-    __file_path = "db.json"
+    __file_path = "file.json"
     __objects = {}
 
     def __del__(self):
