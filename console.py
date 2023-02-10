@@ -9,6 +9,7 @@ Type help to get all commands
 import cmd
 from models import storage
 from exports import valid_classes, BaseModel
+from ast import literal_eval
 
 
 class HBNBCommand(cmd.Cmd):
@@ -22,6 +23,9 @@ class HBNBCommand(cmd.Cmd):
     def preloop(self):
         """Set interpreter-wide attributes"""
         self.available = {"BaseModel": BaseModel}
+        self.valid_commands = {
+                "all": self.do_all,
+                }
 
     def emptyline(self):
         """Does nothing when the user enters an empty line"""
@@ -102,12 +106,15 @@ class HBNBCommand(cmd.Cmd):
         del all_objs[obj_name]
         storage.save()
 
-    def do_all(self, line: str):
+    def do_all(self, line: str, **kwargs):
         """all [class_name]: Prints all the current saved objects."""
         all_objs = storage.all()
-        if line and line not in valid_classes:
-            print("** class doesn't exist **")
-            return
+        if not kwargs:
+            if line and line not in valid_classes:
+                print("** class doesn't exist **")
+                return
+        if kwargs:
+            line = kwargs['class_name']
         filter = True if line and line in valid_classes else False
         list_objs = []
         if filter:
@@ -172,6 +179,61 @@ class HBNBCommand(cmd.Cmd):
         line = line[1:]
         idx = line.index('"')
         return line[:idx]
+
+    def call_command(self, class_name, line):
+        """Calls the right command to perform the task
+        Parameters:
+        - class_name: name of class to use
+        - line: line of text to process.
+            text is in the form `.command(options)`
+        """
+        if not line or line[0] != ".":
+            # return or print error?
+            return
+        elif '(' not in line or ')' not in line:
+            return
+
+        line = line[1:]  # removing the first . sign
+        parts = line.partition('(')
+        command = parts[0]
+        options = parts[1] + parts[2]
+        del parts  # just felt like
+        if command not in self.valid_commands:
+            return
+        try:
+            # catch invalid options
+            options = literal_eval(options)
+        except SyntaxError:
+            return
+        self.valid_commands[command](None, class_name=class_name, options=options)
+
+    def do_User(self, line):
+        """User.command(options): Performs command on User with options"""
+        self.call_command('User', line)
+
+    def do_BaseModel(self, line):
+        """BaseModel.command(options): Performs command on BaseModel with options"""
+        self.call_command('BaseModel', line)
+
+    def do_Place(self, line):
+        """Place.command(options): Performs command on Place with options"""
+        self.call_command('Place', line)
+
+    def do_City(self, line):
+        """City.command(options): Performs command on City with options"""
+        self.call_command('City', line)
+
+    def do_Review(self, line):
+        """Review.command(options): Performs command on Review with options"""
+        self.call_command('Review', line)
+
+    def do_Amenity(self, line):
+        """Amenity.command(options): Performs command on Amenity with options"""
+        self.call_command('Amenity', line)
+
+    def do_State(self, line):
+        """State.command(options): Performs command on State with options"""
+        self.call_command('State', line)
 
 
 if __name__ == "__main__":
