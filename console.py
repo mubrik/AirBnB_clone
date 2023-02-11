@@ -29,6 +29,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, line):
         """Exits the interpreter"""
+        print()  # arfs6: printing new line character
         return self.close()
 
     def do_quit(self, line):
