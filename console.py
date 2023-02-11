@@ -156,7 +156,7 @@ class HBNBCommand(cmd.Cmd):
         args = line.split(" ", 3)
         # classname
         if args[0] not in valid_classes:
-            print("** class doesn't exist")
+            print("** class doesn't exist **")
             return False
         if func in ["all", "create"]:
             return True
