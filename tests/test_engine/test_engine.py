@@ -5,6 +5,7 @@ import json
 import os
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
+from models import storage
 
 
 class TestEngine(unittest.TestCase):
@@ -12,11 +13,13 @@ class TestEngine(unittest.TestCase):
 
     def setUp(self):
         """ setup """
-        self.storage = FileStorage()
+        self.storage = storage
         self.storage.fpa = "test_db.json"
         self.instance = BaseModel()
         self.instance.name = "new"
         self.instance.number = 99
+        self.instance.save()
+        self.storage.reload()
 
     def tearDown(self):
         """ teardown """
@@ -36,6 +39,11 @@ class TestEngine(unittest.TestCase):
 
     def test_all_empty(self):
         """test all storage method"""
+        # remove created instance
+        obj_data = self.instance.to_dict()
+        attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
+        del storage.all()[attr_name]
+        storage.save()
         self.assertEqual(self.storage.all(), {})
 
     def test_all_not_empty(self):
