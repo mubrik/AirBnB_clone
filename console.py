@@ -67,12 +67,12 @@ class HBNBCommand(cmd.Cmd):
             if not self._is_id_kwargs(kwargs):
                 return
             class_name = kwargs["class_name"]
-            id = kwargs['options']
+            ins_id = kwargs['options']
         else:
             args = line.split()
             class_name = args[0]
-            id = args[1]
-        obj_name = f"{class_name}.{id}"
+            ins_id = args[1]
+        obj_name = f"{class_name}.{ins_id}"
         all_objs = storage.all()
         if obj_name not in all_objs:
             print("** no instance found **")
@@ -272,13 +272,13 @@ class HBNBCommand(cmd.Cmd):
         - True: id is valid
         - False: id is not valie
         """
-        id = kwargs["options"]
-        if not id:
+        ins_id = kwargs["options"]
+        if not ins_id:
             print("** instance id missing **")
             return False
 
-        id = id[0]
-        if not isinstance(id, str):
+        ins_id = ins_id[0]
+        if not isinstance(ins_id, str):
             # literal_eval can let other type pass and functions expect strings
             print("** no instance found **")
             return False
