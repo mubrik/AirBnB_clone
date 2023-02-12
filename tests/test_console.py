@@ -72,6 +72,15 @@ class TestConsole(unittest.TestCase):
             self.assertEqual("** class doesn't exist **\n", f.getvalue())
             f.close()
 
+    def test_create_valid_basemodel(self):
+        """testing valid create BaseModel command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create BaseModel")
+            self.assertRegex(
+                f.getvalue(),
+                self.id_regex)
+            f.close()
+
     def test_create_valid_user(self):
         """testing valid create user command"""
         with patch('sys.stdout', new=io.StringIO()) as f:
@@ -85,6 +94,42 @@ class TestConsole(unittest.TestCase):
         """testing valid create Amenity command"""
         with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("create Amenity")
+            self.assertRegex(
+                f.getvalue(),
+                self.id_regex)
+            f.close()
+
+    def test_create_valid_city(self):
+        """testing valid create City command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create City")
+            self.assertRegex(
+                f.getvalue(),
+                self.id_regex)
+            f.close()
+
+    def test_create_valid_place(self):
+        """testing valid create Place command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create Place")
+            self.assertRegex(
+                f.getvalue(),
+                self.id_regex)
+            f.close()
+
+    def test_create_valid_state(self):
+        """testing valid create State command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create State")
+            self.assertRegex(
+                f.getvalue(),
+                self.id_regex)
+            f.close()
+
+    def test_create_valid_review(self):
+        """testing valid create Review command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create Review")
             self.assertRegex(
                 f.getvalue(),
                 self.id_regex)
