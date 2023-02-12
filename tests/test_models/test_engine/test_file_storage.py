@@ -11,17 +11,27 @@ from models import storage
 class TestEngine(unittest.TestCase):
     """ Base engine test cases """
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         """ setup """
         self.storage = storage
         self.storage.fpa = "test_db.json"
+        # storage has already been reloaded in models, so the __objects has
+        # been filled. Clear it!
+        all_objs = storage.all()
+        all_objs.clear()
+        self.storage.reload()
+
+        # arfs6: waiting for mubrik...
+        # def setUp(self):
+            # """Each test method will have one test instance to test with"""
         self.instance = BaseModel()
         self.instance.name = "new"
         self.instance.number = 99
         self.instance.save()
-        self.storage.reload()
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(self):
         """ teardown """
         # delete old test file if created
         if (os.path.isfile(self.storage.fpa)):
@@ -48,6 +58,7 @@ class TestEngine(unittest.TestCase):
 
     def test_all_not_empty(self):
         """test all storage method"""
+        # arfs6: new will be called when the object is created
         self.storage.new(self.instance)
         obj_data = self.instance.to_dict()
         attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
