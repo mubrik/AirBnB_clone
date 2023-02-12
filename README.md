@@ -1,6 +1,6 @@
 # Airbnb Clone
 
-A clone of the popular vacation rental website, Airbnb, built with Python. Currently in beta, this project aims to provide a simple and user-friendly platform for booking and listing properties.
+A clone of the popular vacation rental website, [Airbnb](https://www.airbnb.com), built with Python. Currently in beta, this project aims to provide a simple and user-friendly platform for booking and listing properties.
 
 ## Features
 
