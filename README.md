@@ -41,6 +41,28 @@ The following commands are available in the interpreter:
 - `update class id attr value`: Sets the attribute `attr` of the instance of the class `class` with id `id` to the value `value`.
 - `class.command(options)`: Run a command on an instance of the specified class. `options` should be a valid Python basic object.
 
+## Example
+```
+(hbnb) all 
+[]
+(hbnb) create User 
+b1c0a12e-141c-45e0-8af2-cd2a65cdeb13
+(hbnb) show User b1c0a12e-141c-45e0-8af2-cd2a65cdeb13 
+[User] (b1c0a12e-141c-45e0-8af2-cd2a65cdeb13) {'id': 'b1c0a12e-141c-45e0-8af2-cd2a65cdeb13', 'created_at': datetime.date
+time(2023, 2, 12, 12, 25, 43, 990292), 'updated_at': datetime.datetime(2023, 2, 12, 12, 25, 43, 990314)}
+(hbnb) update User b1c0a12e-141c-45e0-8af2-cd2a65cdeb13 name Admin 
+(hbnb) update User b1c0a12e-141c-45e0-8af2-cd2a65cdeb13 name Admin 
+(hbnb) show User b1c0a12e-141c-45e0-8af2-cd2a65cdeb13 
+[User] (b1c0a12e-141c-45e0-8af2-cd2a65cdeb13) {'id': 'b1c0a12e-141c-45e0-8af2-cd2a65cdeb13', 'created_at': datetime.date
+time(2023, 2, 12, 12, 25, 43, 990292), 'updated_at': datetime.datetime(2023, 2, 12, 12, 27, 3, 177860), 'name': 'Admin'}
+(hbnb) all 
+["[User] (b1c0a12e-141c-45e0-8af2-cd2a65cdeb13) {'id': 'b1c0a12e-141c-45e0-8af2-cd2a65cdeb13', 'created_at': datetime.da
+tetime(2023, 2, 12, 12, 25, 43, 990292), 'updated_at': datetime.datetime(2023, 2, 12, 12, 27, 3, 177860), 'name': 'Admin
+'}"]
+(hbnb) destroy User b1c0a12e-141c-45e0-8af2-cd2a65cdeb13 
+(hbnb)  
+```
+
 ## Tests
 
 Tests for the project can be found in the `tests` directory.
