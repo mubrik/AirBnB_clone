@@ -43,6 +43,14 @@ The following commands are available in the interpreter:
 
 ## Example
 ```
+(hbnb) help 
+
+Documented commands (type help <topic>):
+========================================
+EOF  all  create  destroy  help  quit  show  update
+ 
+(hbnb) help all 
+all [class_name]: Prints all the current saved objects.
 (hbnb) all 
 []
 (hbnb) create User 
