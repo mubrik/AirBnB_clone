@@ -24,12 +24,12 @@ class HBNBCommand(cmd.Cmd):
         """Set interpreter-wide attributes"""
         self.available = {"BaseModel": BaseModel}
         self.valid_commands = {
-                "all": self.do_all,
-                "count": self._count,
-                "show": self.do_show,
-                "destroy": self.do_destroy,
-                "update": self.do_update,
-                }
+            "all": self.do_all,
+            "count": self._count,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update,
+        }
 
     def emptyline(self):
         """Does nothing when the user enters an empty line"""
@@ -52,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
         """create <class_name>:
         Create and saves a new instance of <class_name>"""
         # Verify class name
-        if not self.is_line_valid(class_name, "create"):
+        if not self._is_line_valid(class_name, "create"):
             return
         # This looks ridiculous, mb: looks fine lol
         obj = valid_classes[class_name]()
@@ -63,7 +63,7 @@ class HBNBCommand(cmd.Cmd):
         """show class_name object_id: prints the string representation of
         object with id object_id"""
         # Verify argument
-        if not kwargs and not self.is_line_valid(line, "show"):
+        if not kwargs and not self._is_line_valid(line, "show"):
             return
         if kwargs:
             if not self._is_id_kwargs(kwargs):
@@ -87,7 +87,7 @@ class HBNBCommand(cmd.Cmd):
         """destroy class_name object_id: destroy the object with the id
         object_id"""
         # Verify argument
-        if not kwargs and not self.is_line_valid(line, "destroy"):
+        if not kwargs and not self._is_line_valid(line, "destroy"):
             return
         elif kwargs and not self._is_id_kwargs(kwargs):
             return
@@ -100,17 +100,16 @@ class HBNBCommand(cmd.Cmd):
         if obj_name not in all_objs:
             print("** no instance found **")
             return
-
         # instance exist, destroy it!
         del all_objs[obj_name]
         storage.save()
 
     def do_all(self, line: str, **kwargs):
         """all [class_name]: Prints all the current saved objects."""
-        if not kwargs and not self.is_line_valid(line, "all"):
+        if not kwargs and not self._is_line_valid(line, "all"):
             return
         if kwargs:
-            line = kwargs['class_name']
+            line = kwargs["class_name"]
         all_objs = storage.all()
         filter = True if line and line in valid_classes else False
         list_objs = []
@@ -124,64 +123,65 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, line: str, **kwargs):
         """update class_name object_id attribute value: Updates the object with
         the id object_id by assigning the attribute <attribute> to <value>"""
-        if not self._is_val_update(line, kwargs):
+        if not self._is_upd_args_valid(line, kwargs):
             return
-
         if line:
             args = line.split(" ", 3)
             obj_name = f"{args[0]}.{args[1]}"
             self._set_attr(args[2], args[3], obj_name)
             return
         all_objs = storage.all()
-        if isinstance(kwargs['options'][1], str):
-            options = kwargs['options']
+        if isinstance(kwargs["options"][1], str):
+            options = kwargs["options"]
             obj_name = f"{kwargs['class_name']}.{self._get_id(kwargs)}"
             setattr(all_objs[obj_name], options[1], options[2])
             return
 
         obj_name = f"{kwargs['class_name']}.{self._get_id(kwargs)}"
-        for key, value in kwargs['options'][1].items():
+        for key, value in kwargs["options"][1].items():
             setattr(all_objs[obj_name], key, value)
 
     def do_User(self, line):
         """User.command(options): Performs command on User with options"""
-        self.call_command('User', line)
+        self._call_command("User", line)
 
     def do_BaseModel(self, line):
-        """BaseModel.command(options): Performs command on BaseModel with options"""
-        self.call_command('BaseModel', line)
+        """BaseModel.command(options): Performs command on BaseModel with
+        options"""
+        self._call_command("BaseModel", line)
 
     def do_Place(self, line):
         """Place.command(options): Performs command on Place with options"""
-        self.call_command('Place', line)
+        self._call_command("Place", line)
 
     def do_City(self, line):
         """City.command(options): Performs command on City with options"""
-        self.call_command('City', line)
+        self._call_command("City", line)
 
     def do_Review(self, line):
         """Review.command(options): Performs command on Review with options"""
-        self.call_command('Review', line)
+        self._call_command("Review", line)
 
     def do_Amenity(self, line):
-        """Amenity.command(options): Performs command on Amenity with options"""
-        self.call_command('Amenity', line)
+        """Amenity.command(options): Performs command on Amenity with
+        options"""
+        self._call_command("Amenity", line)
 
     def do_State(self, line):
         """State.command(options): Performs command on State with options"""
-        self.call_command('State', line)
+        self._call_command("State", line)
 
     def _count(self, line, **kwargs):
         """Not a command!
         Counts the number of instances of a class currently stored
-        called using the call_command.
+        called using the _call_command.
         Parameters:
         - line: Not used
         - kwargs: dictionary with:
             - class_name: name of class to use
             - options: not used
         """
-        class_name = kwargs['class_name']
+        class_name = kwargs["class_name"]
 
         # count then print
         all_objs = storage.all()
@@ -192,7 +192,7 @@ class HBNBCommand(cmd.Cmd):
 
         print(count)
 
-    def call_command(self, class_name, line):
+    def _call_command(self, class_name: str, line: str):
         """Calls the right command to perform the task
         Parameters:
         - class_name: name of class to use
@@ -202,12 +202,12 @@ class HBNBCommand(cmd.Cmd):
         if not line or line[0] != ".":
             print(f"*** Unknown syntax: {class_name}{line}")
             return
-        elif '(' not in line or ')' not in line:
+        elif "(" not in line or ")" not in line:
             print(f"*** Unknown syntax: {class_name}{line}")
             return
 
         line = line[1:]  # removing the first . sign
-        parts = line.partition('(')
+        parts = line.partition("(")
         command = parts[0]
         options = parts[1] + parts[2]
         del parts  # just felt like
@@ -216,41 +216,34 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             # catch invalid options
-            options = literal_eval(options)
+            options: tuple = literal_eval(options)
         except (SyntaxError, ValueError):
             # arfs6: chat gpt suggested catching SecurityError but it doesn't
             # workAs. Python can't find it
             print(f"*** Unknown syntax: {class_name}.{line}")
             return
-        self.valid_commands[command](None, class_name=class_name, options=options)
+        print(options)
+        self.valid_commands[command](None,
+                                     class_name=class_name, options=options)
 
-    def get_update_str(self, line: str):
+    def _get_update_str(self, line: str):
         """Return the right string to use as value for the update command"""
-        # strip the first 3 arguments
-        """ for i in range(3):
-            idx = line.index(' ')
-            line = line[idx + 1:] """
         # lets make a wild assumption
         if line[0] == '"' and line[-1] == '"':
             return line[1:-1]
         if line[0] == "'" and line[-1] == "'":
             return line[1:-1]
         return line
-        # find the other quote
-        line = line[1:]
-        idx = line.index('"')
-        return line[:idx]
 
     def _get_id(self, kwargs):
-        """Returns id in kwargs
-        """
+        """Returns id in kwargs"""
         if isinstance(kwargs["options"], tuple):
-            return kwargs['options'][0]
+            return kwargs["options"][0]
         else:
-            return kwargs['options']
+            return kwargs["options"]
 
-    def is_line_valid(self, line: str, func: str):
-        """validator for all handlers """
+    def _is_line_valid(self, line: str, func: str):
+        """validator for all handlers"""
         if not line:
             if func == "all":
                 return True
@@ -263,11 +256,26 @@ class HBNBCommand(cmd.Cmd):
             return False
         if func in ["all", "create"]:
             return True
+        arg_l = len(args)
         # instance
-        if len(args) == 1:
+        if arg_l == 1:
             print("** instance id missing **")
             return False
-        return True
+        if func in ["destroy", "show"]:
+            return True
+        # update checks
+        args = line.split(" ", 3)
+        obj_name = f"{args[0]}.{args[1]}"
+        if obj_name not in storage.all():
+            print("** no instance found **")
+            return False
+        if arg_l == 2:  # no attributes
+            print("** attribute name missing **")
+            return False
+        if arg_l == 3:
+            print("** value missing **")
+            return False
+        return True  # All checks passed -- success
 
     def _is_id_kwargs(self, kwargs):
         """Checks if the options passed is a valid id
@@ -281,9 +289,7 @@ class HBNBCommand(cmd.Cmd):
         if not ins_id:
             print("** instance id missing **")
             return False
-
-            # literal_eval can let other type pass and functions expect strings
-
+        # literal_eval can let other type pass and functions expect strings
         # (obj) == obj
         if isinstance(ins_id, str):
             return True
@@ -299,25 +305,13 @@ class HBNBCommand(cmd.Cmd):
 
         return True
 
-    def _is_val_update(self, line, kwargs):
+    def _is_upd_args_valid(self, line, kwargs):
         """Validates the parameters of update"""
         all_objs = storage.all()
         if not kwargs:
-            if not self.is_line_valid(line, "update"):
+            if not self._is_line_valid(line, "update"):
                 return False
-            args = line.split(" ", 3)
-            arg_l = len(args)
-            obj_name = f"{args[0]}.{args[1]}"
-            if obj_name not in all_objs:
-                print("** no instance found **")
-                return False
-            if arg_l == 2:  # no attributes
-                print("** attribute name missing **")
-                return False
-            if arg_l == 3:
-                print("** value missing **")
-                return False
-            return True  # All checks passed -- success
+            return True
 
         if not self._is_id_kwargs(kwargs):
             return False
@@ -327,31 +321,29 @@ class HBNBCommand(cmd.Cmd):
             return False
 
         # check for attribute name and value
-        arg_l = len(kwargs['options'])
-        options = kwargs['options']
+        arg_l = len(kwargs["options"])
+        options = kwargs["options"]
         if not isinstance(options, tuple):  # only one options.
             print("** attribute name missing **")
             return False
         elif not isinstance(options[1], dict) and arg_l == 2:
-                print("** value missing **")
-                return False
+            print("** value missing **")
+            return False
         return True  # all checks passed -- success
 
     def _set_attr(self, key, val, obj_name):
         """Set the attribute of the object
-    Parameters:
-    - key: attribute name
-    - val: value to set to attribute
-    - obj_name: <class_name>.<id> of the object.
-    """
-        # do we strip here? if val = "33" ~= "'33'" the conversion to ..
-        # int below wont work?
+        Parameters:
+        - key: attribute name
+        - val: value to set to attribute
+        - obj_name: <class_name>.<id> of the object.
+        """
         value = None
         try:
             value = float(val) if "." in val else int(val)
         except ValueError as e:
             # just pass value?
-            value = self.get_update_str(val)
+            value = self._get_update_str(val)
         all_objs = storage.all()
         instance = all_objs[obj_name]
         setattr(instance, key, value)
