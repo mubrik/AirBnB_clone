@@ -14,7 +14,7 @@ class TestAmenity(unittest.TestCase):
         """All thest goes here"""
         self.assertTrue(issubclass(Amenity, BaseModel))
         self.assertTrue(hasattr(Amenity, 'name'))
-        
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -14,7 +14,7 @@ class TestState(unittest.TestCase):
         """All tests goes here"""
         self.assertTrue(issubclass(State, BaseModel))
         self.assertTrue(hasattr(State, 'name'))
-        
+
 
 if __name__ == '__main__':
     unittest.main()

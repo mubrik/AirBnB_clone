@@ -15,7 +15,7 @@ class TestCity(unittest.TestCase):
         self.assertTrue(issubclass(City, BaseModel))
         self.assertTrue(hasattr(City, 'name'))
         self.assertTrue(hasattr(City, 'state_id'))
-        
+
 
 if __name__ == '__main__':
     unittest.main()
