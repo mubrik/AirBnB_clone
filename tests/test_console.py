@@ -14,9 +14,9 @@ from contextlib import redirect_stdout
 class TestConsole(unittest.TestCase):
     """Test case for TestConsole attributes"""
 
-    def setUp(self) -> None:
+    def setUp(self):
+        """setup"""
         self.id_regex = r"[\d\w]{8}-[\d\w]{4}-[\d\w]{4}-[\d\w]{4}-[\d\w]{12}"
-        return super().setUp()
 
     def test_help_all(self):
         """Tesing `help all` command"""
