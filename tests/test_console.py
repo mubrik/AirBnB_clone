@@ -5,6 +5,7 @@ Test case for the Console.
 """
 
 import unittest
+from unittest.mock import patch
 import io
 from console import HBNBCommand
 from contextlib import redirect_stdout
@@ -19,8 +20,7 @@ class TestConsole(unittest.TestCase):
 
     def test_help_all(self):
         """Tesing `help all` command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("help all")
             self.assertEqual(
                 HBNBCommand.do_all.__doc__ + "\n", f.getvalue())
@@ -28,8 +28,7 @@ class TestConsole(unittest.TestCase):
 
     def test_help_show(self):
         """Tesing `help show` command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("help show")
             self.assertEqual(
                 HBNBCommand.do_show.__doc__ + "\n", f.getvalue())
@@ -37,8 +36,7 @@ class TestConsole(unittest.TestCase):
 
     def test_help_update(self):
         """Tesing `help update` command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("help update")
             self.assertEqual(
                 HBNBCommand.do_update.__doc__ + "\n", f.getvalue())
@@ -46,8 +44,7 @@ class TestConsole(unittest.TestCase):
 
     def test_help_destroy(self):
         """Tesing `help destroy` command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("help destroy")
             self.assertEqual(
                 HBNBCommand.do_destroy.__doc__ + "\n", f.getvalue())
@@ -55,8 +52,7 @@ class TestConsole(unittest.TestCase):
 
     def test_help_create(self):
         """Tesing `help create` command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("help create")
             self.assertEqual(
                 HBNBCommand.do_create.__doc__ + "\n", f.getvalue())
@@ -64,24 +60,21 @@ class TestConsole(unittest.TestCase):
 
     def test_create_invalid(self):
         """testing invalid create command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("create")
             self.assertEqual("** class name missing **\n", f.getvalue())
             f.close()
 
     def test_create_invalid_arg(self):
         """testing invalid create command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("create invalid")
             self.assertEqual("** class doesn't exist **\n", f.getvalue())
             f.close()
 
     def test_create_valid_user(self):
         """testing valid create user command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("create User")
             self.assertRegex(
                 f.getvalue(),
@@ -90,8 +83,7 @@ class TestConsole(unittest.TestCase):
 
     def test_create_valid_amenity(self):
         """testing valid create Amenity command"""
-        f = io.StringIO()
-        with redirect_stdout(f):
+        with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("create Amenity")
             self.assertRegex(
                 f.getvalue(),
