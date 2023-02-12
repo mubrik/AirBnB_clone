@@ -16,14 +16,20 @@ A clone of the popular vacation rental website, [Airbnb](https://www.airbnb.com)
 ## Installation and Set-up
 
 1. Clone this repository to your local machine:
-`$ git clone https://github.com/arfs6/AirBnB_clone.git`
+```bash
+$ git clone https://github.com/arfs6/AirBnB_clone.git
+```
 2. Change into the project directory:
-`$ cd AirBnB_clone`
+```bash
+$ cd AirBnB_clone
+```
 
 ## Usage
 
 This project can be run in the console using `console.py` located in the root directory. To start the interpreter, run the following command in your terminal:
-`$ python console.py`
+```bash
+$ python console.py
+```
 
 The following commands are available in the interpreter:
 - `help`: Displays a list of all available commands
