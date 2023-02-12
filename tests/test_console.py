@@ -5,11 +5,8 @@ Test case for the Console.
 """
 
 import unittest
-import sys
 import io
-from unittest.mock import create_autospec
 from console import HBNBCommand
-from models.base_model import BaseModel
 from contextlib import redirect_stdout
 
 
