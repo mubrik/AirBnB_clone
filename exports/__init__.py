@@ -1,3 +1,10 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
+"""
+holds exported classes
+"""
+
 from typing import Dict, Union
 from models.base_model import BaseModel
 from models.amenity import Amenity

@@ -3,7 +3,6 @@
 """
 Includes the class BaseModel which is the base of each class.
 """
-
 from uuid import uuid4
 from datetime import datetime
 from . import storage
