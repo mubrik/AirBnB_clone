@@ -33,6 +33,15 @@ class TestEngine(unittest.TestCase):
         self.assertTrue(hasattr(FileStorage, '_FileStorage__file_path'))
         self.assertTrue(hasattr(FileStorage, '_FileStorage__objects'))
 
+    def test_objects_storage(self):
+        """test storage .__objects method"""
+        obj_data = self.instance.to_dict()
+        attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
+        self.assertIn(attr_name, self.storage._FileStorage__objects)
+        del self.storage.all()[attr_name]
+        self.storage.save()
+        self.assertEqual(self.storage._FileStorage__objects, {})
+
     def test_valid_new(self):
         """test new basemodel instance"""
         self.assertEqual(self.instance.name, "new")
