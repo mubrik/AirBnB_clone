@@ -97,10 +97,16 @@ class TestEngine(unittest.TestCase):
 
     def test_save(self):
         """test save method"""
+        new_ins = BaseModel()
+        new_ins.name = "new2"
+        new_ins.number = 1337
         self.storage.save()
-        obj_data = self.instance.to_dict()
+        obj_data = new_ins.to_dict()
         attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
-        self.assertEqual(self.storage.all()[f'{attr_name}'], self.instance)
+        self.assertEqual(self.storage.all()[f'{attr_name}'], new_ins)
+        del self.storage.all()[attr_name]
+        self.storage.save()
+        self.assertNotIn(attr_name, self.storage.all())
 
     def test_reload(self):
         """test save method"""
