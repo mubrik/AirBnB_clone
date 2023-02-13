@@ -8,7 +8,6 @@ import unittest
 from unittest.mock import patch
 import io
 from console import HBNBCommand
-from contextlib import redirect_stdout
 
 
 class TestConsole(unittest.TestCase):
@@ -48,6 +47,27 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd("help destroy")
             self.assertEqual(
                 HBNBCommand.do_destroy.__doc__ + "\n", f.getvalue())
+            f.close()
+
+    def test_quit(self):
+        """Tesing `quit` command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            ret = HBNBCommand().onecmd("quit")
+            self.assertEqual(ret, True)
+            f.close()
+
+    def test_eof(self):
+        """Tesing `EOF ctrl-D` command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("EOF")
+            self.assertEqual("\n", f.getvalue())
+            f.close()
+
+    def test_emptyline(self):
+        """Tesing `emptyline` command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("\n")
+            self.assertEqual("", f.getvalue())
             f.close()
 
     def test_help_create(self):
@@ -133,6 +153,13 @@ class TestConsole(unittest.TestCase):
             self.assertRegex(
                 f.getvalue(),
                 self.id_regex)
+            f.close()
+
+    def test_destroy_basemodel(self):
+        """testing `destroy BaseModel` command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("destroy BaseModel")
+            self.assertEqual("** instance id missing **\n", f.getvalue())
             f.close()
 
     def test_show_invalid(self):
