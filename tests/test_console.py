@@ -134,3 +134,31 @@ class TestConsole(unittest.TestCase):
                 f.getvalue(),
                 self.id_regex)
             f.close()
+
+    def test_show_invalid(self):
+        """testing invalid show command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("show")
+            self.assertEqual("** class name missing **\n", f.getvalue())
+            f.close()
+
+    def test_show_bad_class(self):
+        """testing show bad class command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("show BadClass")
+            self.assertEqual("** class doesn't exist **\n", f.getvalue())
+            f.close()
+
+    def test_show_missing_id(self):
+        """testing show missing id command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("show BaseModel")
+            self.assertEqual("** instance id missing **\n", f.getvalue())
+            f.close()
+
+    def test_valid_show(self):
+        """testing valid show command"""
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create User")
+            self.assertEqual("** instance id missing **\n", f.getvalue())
+            f.close()

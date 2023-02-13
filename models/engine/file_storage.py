@@ -75,7 +75,7 @@ class FileStorage:
                     k: self.make_inst(v) for (k, v) in obj.items()}
         except FileNotFoundError as e:
             # raise or return hmm?
-            pass
+            self.__objects = {}
 
     def make_inst(self, obj: Dict[str, str]):
         """makes instance of a specific class"""
