@@ -15,11 +15,7 @@ class TestEngine(unittest.TestCase):
     def setUp(self):
         """ setup """
         self.storage = storage
-        self.storage.fpa = "test_db.json"
-        # storage has already been reloaded in models, so the __objects has
-        # been filled. Clear it!
-        """ all_objs = storage.all()
-        all_objs.clear() """
+        self.storage.fpa = "file.json"
         self.storage.reload()
         self.instance = BaseModel()
         self.instance.name = "new"
@@ -28,7 +24,6 @@ class TestEngine(unittest.TestCase):
 
     def tearDown(self):
         """ teardown """
-        # delete old test file if created
         if (os.path.isfile(self.storage.fpa)):
             os.remove(self.storage.fpa)
         del self.storage
@@ -44,7 +39,6 @@ class TestEngine(unittest.TestCase):
 
     def test_all_empty(self):
         """test all storage method"""
-        # remove created instance
         obj_data = self.instance.to_dict()
         attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
         del self.storage.all()[attr_name]
@@ -53,7 +47,6 @@ class TestEngine(unittest.TestCase):
 
     def test_all_not_empty(self):
         """test all storage method"""
-        # arfs6: new will be called when the object is created
         obj_data = self.instance.to_dict()
         attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
         self.assertEqual(self.storage.all()[f'{attr_name}'], self.instance)
