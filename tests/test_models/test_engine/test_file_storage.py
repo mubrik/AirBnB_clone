@@ -28,6 +28,11 @@ class TestEngine(unittest.TestCase):
             os.remove(self.storage.fpa)
         del self.storage
 
+    def test_attributes(self):
+        """test class attributes"""
+        self.assertTrue(hasattr(FileStorage, '_FileStorage__file_path'))
+        self.assertTrue(hasattr(FileStorage, '_FileStorage__objects'))
+
     def test_valid_new(self):
         """test new basemodel instance"""
         self.assertEqual(self.instance.name, "new")
@@ -80,3 +85,18 @@ class TestEngine(unittest.TestCase):
             self.storage.new("a bad string")
         self.assertEqual(
             cm.exception.args[0], "Argument isnt a subclass of BaseModel")
+
+    def test_save(self):
+        """test save method"""
+        self.storage.save()
+        obj_data = self.instance.to_dict()
+        attr_name = f"{obj_data['__class__']}.{obj_data['id']}"
+        self.assertEqual(self.storage.all()[f'{attr_name}'], self.instance)
+
+    def test_reload(self):
+        """test save method"""
+        # remove file then reload
+        if (os.path.isfile(self.storage.fpa)):
+            os.remove(self.storage.fpa)
+        self.storage.reload()
+        self.assertEqual(self.storage.all(), {})
