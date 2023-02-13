@@ -5,4 +5,5 @@ __pycache__
 *.pyc
 db.json
 test_db.json
+test_console_db.json
 file.json

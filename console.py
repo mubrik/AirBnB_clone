@@ -199,6 +199,15 @@ class HBNBCommand(cmd.Cmd):
         - line: line of text to process.
             text is in the form `.command(options)`
         """
+        # moving this from preloop, preloop might not run before onecmd()?
+        # onecmd is necessary for testing
+        self.valid_commands = {
+            "all": self.do_all,
+            "count": self._count,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
+            "update": self.do_update,
+        }
         if not line or line[0] != ".":
             print(f"*** Unknown syntax: {class_name}{line}")
             return
@@ -222,7 +231,6 @@ class HBNBCommand(cmd.Cmd):
             # workAs. Python can't find it
             print(f"*** Unknown syntax: {class_name}.{line}")
             return
-        print(options)
         self.valid_commands[command](None,
                                      class_name=class_name, options=options)
 
