@@ -15,7 +15,7 @@ class TestEngine(unittest.TestCase):
     def setUp(self):
         """ setup """
         self.storage = storage
-        self.storage.fpa = "file.json"
+        self.storage.fpa = "test_db.json"
         self.storage.reload()
         self.instance = BaseModel()
         self.instance.name = "new"

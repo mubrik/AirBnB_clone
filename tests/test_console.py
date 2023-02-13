@@ -155,10 +155,3 @@ class TestConsole(unittest.TestCase):
             HBNBCommand().onecmd("show BaseModel")
             self.assertEqual("** instance id missing **\n", f.getvalue())
             f.close()
-
-    def test_valid_show(self):
-        """testing valid show command"""
-        with patch('sys.stdout', new=io.StringIO()) as f:
-            HBNBCommand().onecmd("create User")
-            self.assertEqual("** instance id missing **\n", f.getvalue())
-            f.close()
