@@ -6,4 +6,5 @@ __pycache__
 db.json
 test_db.json
 test_console_db.json
+test_amenity_db.json
 file.json
