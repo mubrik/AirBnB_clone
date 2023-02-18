@@ -1,0 +1,20 @@
+header {
+  display: flex;
+  height: 70px;
+  width: 100%;
+  border-bottom: 1px solid #CCCCCC;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.logo-container {
+  margin-left: 20px;
+  padding-left: 50px;
+  background-clip: border-box;
+  background-image: url("../images/logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  width: 142px;
+  height: 60px;
+}

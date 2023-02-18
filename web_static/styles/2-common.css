@@ -1,0 +1,15 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin:0px;
+  padding:0px;
+}
